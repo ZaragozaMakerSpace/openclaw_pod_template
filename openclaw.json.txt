@@ -1,0 +1,115 @@
+{
+  "gateway": {
+    "controlUi": {
+      "allowedOrigins": [
+        "http://localhost:18789",
+        "http://127.0.0.1:18789"
+      ],
+      "allowInsecureAuth": true
+    },
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "a05895181d677ec0accd72ed3f217b1cad567def18dae237"
+    },
+    "port": 18789,
+    "bind": "loopback",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send",
+        "sms.search"
+      ]
+    }
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.4.15",
+    "lastTouchedAt": "2026-05-03T10:50:37.864Z"
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/root/.openclaw/workspace",
+      "models": {
+        "vllm/mistralai/Mistral-7B-Instruct-v0.2": {}
+      },
+      "model": {
+        "primary": "vllm/mistralai/Mistral-7B-Instruct-v0.2"
+      }
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "coding"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "vllm": {
+        "baseUrl": "http://127.0.0.1:8001/v1",
+        "api": "openai-completions",
+        "apiKey": "VLLM_API_KEY",
+        "models": [
+          {
+            "id": "mistralai/Mistral-7B-Instruct-v0.2",
+            "name": "mistralai/Mistral-7B-Instruct-v0.2",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "vllm:default": {
+        "provider": "vllm",
+        "mode": "api_key"
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "botToken": "8455010446:AAEG4PF4T3zQa3S5rNFJkS-63KP0JtBsWM8"
+    }
+  },
+  "wizard": {
+    "lastRunAt": "2026-05-03T10:48:54.826Z",
+    "lastRunVersion": "2026.4.15",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "plugins": {
+    "entries": {
+      "vllm": {
+        "enabled": true
+      }
+    }
+  }
+}

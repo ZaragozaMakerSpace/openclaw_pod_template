@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.3.1-runtime-ubuntu22.04
+FROM nvidia/cuda:12.8.0-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
@@ -41,11 +41,11 @@ RUN /opt/venv/bin/pip install --no-cache-dir \
     fastapi \
     uvicorn \
     openai \
-    transformers \
+    transformers==4.51.3 \
     accelerate \
     sentencepiece \
     huggingface_hub \
-    vllm
+    vllm==0.8.5
 
 # ----------------------------
 # Install OpenClaw
@@ -67,7 +67,6 @@ RUN mkdir -p \
     /workspace/hf
 
 ENV HF_HOME=/workspace/hf
-ENV TRANSFORMERS_CACHE=/workspace/hf
 
 # ----------------------------
 # Copy config/scripts
@@ -76,8 +75,11 @@ COPY start.sh /start.sh
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY scripts /scripts
 
-RUN chmod +x /start.sh && \
-    chmod +x /scripts/start_llm.sh
+RUN sed -i 's/\r//' /start.sh && \
+    sed -i 's/\r//' /etc/supervisor/conf.d/supervisord.conf && \
+    find /scripts -type f -name "*.sh" -exec sed -i 's/\r//' {} + && \
+    chmod +x /start.sh && \
+    chmod +x /scripts/*.sh
 
 # ----------------------------
 # Ports
