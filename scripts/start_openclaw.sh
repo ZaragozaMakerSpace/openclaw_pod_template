@@ -3,7 +3,7 @@ set -e
 
 export OPENCLAW_HOME="${OPENCLAW_HOME:-/workspace/.openclaw}"
 export OPENCLAW_STATE_DIR="${OPENCLAW_STATE_DIR:-/workspace/.openclaw}"
-export OPENCLAW_GATEWAY_TOKEN="${OPENCLAW_GATEWAY_TOKEN:-a05895181d677ec0accd72ed3f217b1cad567def18dae237}"
+export OPENCLAW_GATEWAY_TOKEN="${OPENCLAW_GATEWAY_TOKEN:-ocw-local-dev}"
 
 mkdir -p "$OPENCLAW_STATE_DIR"
 
@@ -33,26 +33,27 @@ echo "Applying OpenClaw config template (telegram excluded)..."
 # gateway
 set_config gateway.mode local
 set_config gateway.port 18789
-set_config gateway.bind loopback
+set_config gateway.bind all
 set_config gateway.auth.mode token
 set_config gateway.auth.token "$OPENCLAW_GATEWAY_TOKEN"
-set_config gateway.controlUi.allowedOrigins '["http://localhost:18789","http://127.0.0.1:18789"]'
+set_config gateway.controlUi.allowedOrigins '["*"]'
 set_config gateway.controlUi.allowInsecureAuth true
 set_config gateway.tailscale.mode off
 set_config gateway.tailscale.resetOnExit false
 set_config gateway.nodes.denyCommands '["camera.snap","camera.clip","screen.record","contacts.add","calendar.add","reminders.add","sms.send","sms.search"]'
 
 # additional non-telegram settings from template
-set_config agents.defaults.workspace /root/.openclaw/workspace
-set_config agents.defaults.model.primary vllm/mistralai/Mistral-7B-Instruct-v0.2
-set_config agents.defaults.models.vllm/mistralai/Mistral-7B-Instruct-v0.2 '{}'
+set_config agents.defaults.workspace /workspace/.openclaw/workspace
+set_config agents.defaults.model.primary "$MODEL"
+# set_config agents.defaults.models.vllm/mistralai/Mistral-7B-Instruct-v0.2 '{}'
 set_config session.dmScope per-channel-peer
 set_config tools.profile coding
 set_config models.mode merge
-set_config models.providers.vllm.baseUrl http://127.0.0.1:8001/v1
+set_config models.providers.vllm.baseUrl "$VLLM_BASE_URL"
 set_config models.providers.vllm.api openai-completions
-set_config models.providers.vllm.apiKey VLLM_API_KEY
-set_config models.providers.vllm.models '[{"id":"mistralai/Mistral-7B-Instruct-v0.2","name":"mistralai/Mistral-7B-Instruct-v0.2","reasoning":false,"input":["text"],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":128000,"maxTokens":8192}]'
+set_config models.providers.vllm.apiKey "$VLLM_API_KEY"
+# set_config models.providers.vllm.models '[{"id":"mistralai/Mistral-7B-Instruct-v0.2","name":"mistralai/Mistral-7B-Instruct-v0.2","reasoning":false,"input":["text"],"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0},"contextWindow":128000,"maxTokens":8192}]'
+set_config models.providers.vllm.models "[{\"id\":\"$MODEL\"}]"
 set_config auth.profiles.vllm:default.provider vllm
 set_config auth.profiles.vllm:default.mode api_key
 set_config plugins.entries.vllm.enabled true

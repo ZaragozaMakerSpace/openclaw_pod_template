@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.8.0-runtime-ubuntu22.04
+FROM nvidia/cuda:12.6.3-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
     openssh-server \
     build-essential \
     ca-certificates \
+    nano \
+    net-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # ----------------------------
